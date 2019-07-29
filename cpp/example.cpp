@@ -1,3 +1,5 @@
+#include "Tracer.h"
+
 class Foo
 {
 public:
