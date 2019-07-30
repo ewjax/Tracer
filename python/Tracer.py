@@ -91,13 +91,110 @@
 #        };
 #
 
- class Tracer:
+class Tracer:
 
-     trace_group    = ''        # TRACEGROUP environment variable
-     trace_level    = 0         # equal to TRACELEVEL environment variable
-     only_flag      = False     # cooresponds to TRACEONLY environment variable
-     env_checked    = False     # boolean
+    # define a bunch of Class (static) variables
+    trace_group    = ''        # TRACEGROUP environment variable
+    trace_level    = 0         # equal to TRACELEVEL environment variable
+    only_flag      = False     # cooresponds to TRACEONLY environment variable
+    env_checked    = False     # boolean
+    tracer_counter = 0         # used to generate unique serial numbers for each Tracer instances
 
-     trace_count    = 0         # used to generate unique serial numbers for each Tracer instances
+
+    #
+    # ctor
+    #
+    def __init__(self, print_flag, group, level, trace_message):
+
+        # group this Tracer belongs to
+        self.group = group
+
+        # trace level of this Tracer
+        self.level = level
+
+        # tracer message
+        self.trace_message = trace_message
+
+        # which number is this Tracer
+        # a non-zero value for 'serial' not only uniquely identifies this tracer,
+        # but also doubles as a flag to indicate that this Tracer SHOULD print
+        self.serial = 0
+
+        # simple integer to keep track of whether an exit message is printed
+        # at destruction.  If usecount == 0, no message is printed
+        # set to 0 in ctor, incremented at every call to Print().
+        self.use_count = 0
+
+        # only do this once, since the call to getenv() is relatively expenensive
+        if not self.env_checked:
+            env_checked = True
+            self._CheckEnvironment()
+
+    #
+    # dtor
+    #
+    def __del__(self):
+
+        # print a closing message, if 
+        #   - the serial number is non-zero, indicating this instance SHOULD print, and
+        #   - the use_count > 0, indicating this instance has printed message more than once via the Print member function
+        if ( (self.serial > 0) and (self.use_count > 0) ):
+            print('Tracer: [{}][{}, {}] -exit-'.format(self.serial, self.group, self.level))
+
+
+
+
+    # 
+    # because calls to getenv() are expensive, this function is only
+    # called once, and the results are saved in static class variables
+    # 
+    def _CheckEnvironment(self):
+        pass
+
+                    
+
+
+#        void Tracer::CheckEnvironment()
+#        {
+#            // get the TRACEGROUP's from the environment
+#            // get the TRACELEVEL from the environment
+#            // get the TRACEONLY from the environment
+#            grpenv = getenv("TRACEGROUP");
+#            char* levenv = getenv("TRACELEVEL");
+#            char* onlyenv = getenv("TRACEONLY");
+#
+#            if (levenv)
+#                tracelevel = atoi(levenv);
+#
+#            if (onlyenv)
+#            {
+#                if (0 == strcmp(onlyenv, "TRUE") || (0 == strcmp(onlyenv, "true")))
+#                {
+#                    onlyflag = true;
+#                }
+#            }
+#        }
+
+
+
+
+
+
+
+
+
+
+def main():
+
+    tt = Tracer(True, 'Main', 5, 'Entering main() function')
+
+
+
+
+if __name__ == '__main__':
+    main()
+
+
+
 
 
