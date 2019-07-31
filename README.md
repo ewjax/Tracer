@@ -9,7 +9,8 @@ Each instance of Tracer knows:
 Generally, the intended use would be for Tracer instances to be scattered throughout the source code, with their group names set to logical values (perhaps a class names or module names), and with level values generally corresponding to their level of detail (higher values for higher levels of detail).
 
 Tracer instances will print their message to stderr, if the following conditions are true:
-  - the Tracer instance group name is contained in the TRACEGROUP environment variable (or if TRACEGROUP is set to ALL), and
+  - the boolean 'condition' variable is true, and
+  - the Tracer instance group name is contained in the TRACEGROUP environment variable (or if TRACEGROUP is set to ALL), and either
   - the Tracer instance level is less than or equal to the TRACELEVEL environment variable, or
   - the Tracer instance level is exactly equal to the TRACELEVEL environment variable, IF the TRACEONLY environment variable is also set to TRUE
   
