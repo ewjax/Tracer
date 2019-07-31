@@ -1,6 +1,14 @@
 # Tracer
 A class, in C++ or Python, to conditionally output a debugging message to stderr, depending on the settings of several environment variables, which the user can control at run time via the shell command line, prior to execution of the code
 
+    // constructor and Print() member function, C++
+    Tracer(bool condition, char *aGroup, int aLevel, char *format, ...);
+    void Print(bool condition, char *format, ...);
+
+    # constructor and Print() member function, Python
+    def __init__(self, print_flag, group, level, message):
+    def Print(self, print_flag, message):
+
 Each instance of Tracer knows:
   - a string corresponding to which group this Tracer belongs to 
   - an integer corresponding to the level of detail at which this Tracer will print
