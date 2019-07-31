@@ -21,7 +21,9 @@ C++ example:
 
 class Foo
 {
+
 public:
+
     void FooFunction()
     {
         // Tracer for an entering message - set group to "Foo" and level to 5
@@ -43,7 +45,9 @@ public:
 
 class Bar
 {
+
 public:
+
     void BarFunction()
     {
         // Tracer for an entering message - set group to "Bar" and level to 5
