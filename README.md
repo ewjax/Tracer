@@ -13,4 +13,4 @@ Tracer instances will print their message to stderr, if the following conditions
   - the Tracer instance level is less than or equal to the TRACELEVEL environment variable, or
   - the Tracer instance level is exactly equal to the TRACELEVEL environment variable, IF the TRACEONLY environment variable is also set to TRUE
   
-In this way, the develop can easily turn on or off particular TRACER messages scattered throughout the source code at run time, by manipulating the TRACEGROUP, TRACELEVEL, and TRACEONLY environment variables.
+In this way, the develop can easily turn on or off particular TRACER messages scattered throughout the source code at run time, by manipulating the TRACEGROUP, TRACELEVEL, and TRACEONLY environment variables prior to executing the code in question, and watching the messages printed to stderr.
