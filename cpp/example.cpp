@@ -11,7 +11,8 @@ public:
         // ...do some Foo stuff.  Perhaps there could be an error condition involved
         // indicated with a boolean someErrorFlag.
         bool someErrorFlag = true;
-        Tracer(someErrorFlag, "Foo", 5, "Encountered an error condition");
+        const char* someErrorMessage = "Too Close for Comfort!";
+        Tracer(someErrorFlag, "Foo", 5, "Encountered an error condition: %s", someErrorMessage);
 
         // higher level of detail, group is still set to "Foo" but level is now 10
         Tracer tt(true, "Foo", 10, "Doing some detailed calculations");
@@ -64,13 +65,13 @@ int main()
     // sample stderr output, with TRACEGROUP=Foo,Bar and TRACELEVEL=5
     //
     //          Tracer: [1][Foo, 5] Entering FooFunction()
-    //          Tracer: [2][Foo, 5] Encountered an error condition
+    //          Tracer: [2][Foo, 5] Encountered an error condition: Too Close for Comfort!
     //          Tracer: [3][Bar, 5] Entering BarFunction()
     //
     // sample stderr output, with TRACEGROUP=Foo,Bar and TRACELEVEL=10
     //
     //          Tracer: [1][Foo, 5] Entering FooFunction()
-    //          Tracer: [2][Foo, 5] Encountered an error condition
+    //          Tracer: [2][Foo, 5] Encountered an error condition: Too Close for Comfort!
     //          Tracer: [3][Foo, 10] Doing some detailed calculations
     //          Tracer: [3][Foo, 10] Iteration 0
     //          Tracer: [3][Foo, 10] Iteration 1

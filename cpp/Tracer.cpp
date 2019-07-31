@@ -143,7 +143,7 @@ void Tracer::Print(bool condition, char *format, ...)
     }
 }
 
-#define TESTTRACER
+//#define TESTTRACER
 #ifdef TESTTRACER
 
 
@@ -212,13 +212,13 @@ int main()
     // sample stderr output, with TRACEGROUP=Foo,Bar and TRACELEVEL=5
     //
     //          Tracer: [1][Foo, 5] Entering FooFunction()
-    //          Tracer: [2][Foo, 5] Encountered an error condition
+    //          Tracer: [2][Foo, 5] Encountered an error condition: Too Close for Comfort!
     //          Tracer: [3][Bar, 5] Entering BarFunction()
     //
     // sample stderr output, with TRACEGROUP=Foo,Bar and TRACELEVEL=10
     //
     //          Tracer: [1][Foo, 5] Entering FooFunction()
-    //          Tracer: [2][Foo, 5] Encountered an error condition
+    //          Tracer: [2][Foo, 5] Encountered an error condition: Too Close for Comfort!
     //          Tracer: [3][Foo, 10] Doing some detailed calculations
     //          Tracer: [3][Foo, 10] Iteration 0
     //          Tracer: [3][Foo, 10] Iteration 1
