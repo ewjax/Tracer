@@ -1,3 +1,6 @@
+import os
+import sys
+
 #
 #    Tracer
 #
@@ -19,9 +22,6 @@
 #    environment variable TRACEONLY is set to the string "TRUE".  This is
 #    useful when it is desired to use the trace function as a debugging
 #    tool inside a specific function, without seeing any other trace output.
-#
-#    Output is similar to printf, using the format string and a variable
-#    number of additional parameters.
 #
 #    Environment variable summary:
 #
@@ -57,38 +57,35 @@
 # 
 #    Example:
 # 
-#        class Foo
-#        {
-#        public:
-#            void FooFunction()
-#            {
-#                // Tracer for an entering message - set group to "Foo" and level to 5
-#                Tracer(true, "Foo", 5, "Entering FooFunction()");
+#            class Foo:
 #
-#                // ...do some Foo stuff.  Perhaps there could be an error condition involved
-#                // indicated with a boolean someErrorFlag.
-#                bool someErrorFlag = true;
-#                Tracer(someErrorFlag, "Foo", 5, "Encountered an error condition");
+#                def FooFunction(self):
 #
-#                // higher level of detail, group is still set to "Foo" but level is now 10
-#                Tracer tt(true, "Foo", 10, "Doing some detailed calculations");
-#                for (int i = 0; i < 10; i++)
-#                    tt.Print(true, "Iteration %d", i);
-# 
-#            }
-#        };
+#                    # Tracer for an entering message - set group to "Foo" and level to 5
+#                    Tracer.Tracer(True, 'Foo', 5, 'Entering FooFunction()');
 #
-#        class Bar
-#        {
-#        public:
-#            void BarFunction()
-#            {
-#                // Tracer for an entering message - set group to "Bar" and level to 5
-#                Tracer(true, "Bar", 5, "Entering BarFunction()");
 #
-#                // ...more Bar stuff 
-#            }
-#        };
+#                    # ...do some Foo stuff.  Perhaps there could be an error condition involved
+#                    # indicated with a boolean someErrorFlag.
+#                    someErrorFlag = True
+#                    Tracer.Tracer(someErrorFlag, 'Foo', 5, 'Encountered an error condition');
+#
+#                    # higher level of detail, group is still set to "Foo" but level is now 10
+#                    tt = Tracer.Tracer(True, 'Foo', 10, 'Doing some detailed calculations');
+#                    for i in range(10):
+#                        tt.Print(True, 'Iteration {}'.format(i))
+#
+#
+#
+#            class Bar:
+#
+#                def BarFunction(self):
+#
+#                    # Tracer for an entering message - set group to "Bar" and level to 5
+#                    Tracer.Tracer(True, 'Bar', 5, 'Entering BarFunction()');
+#
+#                    # ...more Bar stuff 
+#
 #
 
 class Tracer:
@@ -97,23 +94,20 @@ class Tracer:
     trace_group    = ''        # TRACEGROUP environment variable
     trace_level    = 0         # equal to TRACELEVEL environment variable
     only_flag      = False     # cooresponds to TRACEONLY environment variable
-    env_checked    = False     # boolean
+    env_checked    = False     # boolean.  Necessary for python??? 
     tracer_counter = 0         # used to generate unique serial numbers for each Tracer instances
 
 
     #
     # ctor
     #
-    def __init__(self, print_flag, group, level, trace_message):
+    def __init__(self, print_flag, group, level, message):
 
         # group this Tracer belongs to
         self.group = group
 
         # trace level of this Tracer
         self.level = level
-
-        # tracer message
-        self.trace_message = trace_message
 
         # which number is this Tracer
         # a non-zero value for 'serial' not only uniquely identifies this tracer,
@@ -126,9 +120,27 @@ class Tracer:
         self.use_count = 0
 
         # only do this once, since the call to getenv() is relatively expenensive
-        if not self.env_checked:
-            env_checked = True
+        # is this flag check necessary in python???  Unsure.  Docs indicate that os.environ is 
+        # populated once, when os is imported, so this variable check for performance may be
+        # unnecessary
+        if not Tracer.env_checked:
+            Tracer.env_checked = True
             self._CheckEnvironment()
+
+        if ('' != Tracer.trace_group):
+            if ( ('ALL' == Tracer.trace_group) or (self.group in Tracer.trace_group) ):
+                if ( ((Tracer.only_flag == True) and (self.level == Tracer.trace_level)) or ((Tracer.only_flag == False) and (self.level <= Tracer.trace_level)) ):
+
+                    # a non-zero value for 'serial' not only uniquely identifies this tracer,
+                    # but also doubles as a flag to indicate that this Tracer SHOULD print
+                    # the tracecount variable is a static class value
+                    Tracer.tracer_counter += 1
+                    self.serial = Tracer.tracer_counter
+
+                    # is the print_flag true?
+                    if print_flag:
+                        print('Tracer: [{}][{}, {}] {}'.format(self.serial, self.group, self.level, message), file=sys.stderr)
+
 
     #
     # dtor
@@ -139,48 +151,36 @@ class Tracer:
         #   - the serial number is non-zero, indicating this instance SHOULD print, and
         #   - the use_count > 0, indicating this instance has printed message more than once via the Print member function
         if ( (self.serial > 0) and (self.use_count > 0) ):
-            print('Tracer: [{}][{}, {}] -exit-'.format(self.serial, self.group, self.level))
-
+            print('Tracer: [{}][{}, {}] -exit-'.format(self.serial, self.group, self.level), file=sys.stderr)
 
 
 
     # 
-    # because calls to getenv() are expensive, this function is only
-    # called once, and the results are saved in static class variables
-    # 
+    # check the TRACExx environment variables
+    #
     def _CheckEnvironment(self):
-        pass
 
-                    
+        if 'TRACEGROUP' in os.environ:
+            Tracer.trace_group = os.environ['TRACEGROUP']
 
+        if 'TRACELEVEL' in os.environ:
+            Tracer.trace_level = int(os.environ['TRACELEVEL'])
 
-#        void Tracer::CheckEnvironment()
-#        {
-#            // get the TRACEGROUP's from the environment
-#            // get the TRACELEVEL from the environment
-#            // get the TRACEONLY from the environment
-#            grpenv = getenv("TRACEGROUP");
-#            char* levenv = getenv("TRACELEVEL");
-#            char* onlyenv = getenv("TRACEONLY");
-#
-#            if (levenv)
-#                tracelevel = atoi(levenv);
-#
-#            if (onlyenv)
-#            {
-#                if (0 == strcmp(onlyenv, "TRUE") || (0 == strcmp(onlyenv, "true")))
-#                {
-#                    onlyflag = true;
-#                }
-#            }
-#        }
+        if 'TRACEONLY' in os.environ:
+            if ( (os.environ['TRACEONLY'] == 'True') or (os.environ['TRACEONLY'] == 'TRUE') or (os.environ['TRACEONLY'] == 'true') ):
+                Tracer.only_flag = True
 
+    #
+    # print a message to stderr if the passed 'condition' variable
+    # is non-zero, and if this Tracer object SHOULD be printing, based
+    # on the TRACExx environment varialbes
+    #
+    def Print(self, print_flag, message):
 
-
-
-
-
-
+        # print message if 'print_flag' is true, and if this Tracer SHOULD print
+        if ( (print_flag) and (self.serial > 0) ):
+            print('Tracer: [{}][{}, {}] {}'.format(self.serial, self.group, self.level, message), file=sys.stderr)
+            self.use_count += 1
 
 
 
@@ -188,6 +188,7 @@ def main():
 
     tt = Tracer(True, 'Main', 5, 'Entering main() function')
 
+    Tracer(True, "Foo", 5, "Entering FooFunction()");
 
 
 

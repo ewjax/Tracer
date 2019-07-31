@@ -72,7 +72,8 @@
 //                // ...do some Foo stuff.  Perhaps there could be an error condition involved
 //                // indicated with a boolean someErrorFlag.
 //                bool someErrorFlag = true;
-//                Tracer(someErrorFlag, "Foo", 5, "Encountered an error condition");
+//                const char* someErrorMessage = "Too Close for Comfort!";
+//                Tracer(someErrorFlag, "Foo", 5, "Encountered an error condition: %s", someErrorMessage);
 //
 //                // higher level of detail, group is still set to "Foo" but level is now 10
 //                Tracer tt(true, "Foo", 10, "Doing some detailed calculations");
