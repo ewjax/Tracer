@@ -15,6 +15,7 @@ Tracer instances will print their message to stderr, if the following conditions
   
 In this way, the develop can easily turn on or off particular TRACER messages scattered throughout the source code at run time, by manipulating the TRACEGROUP, TRACELEVEL, and TRACEONLY environment variables.
 
+
 C++ example:
 
 #include "Tracer.h"
