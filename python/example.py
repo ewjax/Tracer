@@ -7,17 +7,17 @@ class Foo:
     def FooFunction(self):
 
         # Tracer for an entering message - set group to "Foo" and level to 5
-        Tracer.Tracer(True, 'Foo', 5, 'Entering FooFunction()');
+        Tracer.Tracer(True, 'Foo', 5, 'Entering FooFunction()')
 
 
         # ...do some Foo stuff.  Perhaps there could be an error condition involved
         # indicated with a boolean someErrorFlag.
         someErrorFlag = True
         someErrorMessage = 'Too Close for Comfort!'
-        Tracer.Tracer(someErrorFlag, 'Foo', 5, 'Encountered an error condition: {}'.format(someErrorMessage));
+        Tracer.Tracer(someErrorFlag, 'Foo', 5, 'Encountered an error condition: {}'.format(someErrorMessage))
 
         # higher level of detail, group is still set to "Foo" but level is now 10
-        tt = Tracer.Tracer(True, 'Foo', 10, 'Doing some detailed calculations');
+        tt = Tracer.Tracer(True, 'Foo', 10, 'Doing some detailed calculations')
         for i in range(10):
             tt.Print(True, 'Iteration {}'.format(i))
 
@@ -28,7 +28,7 @@ class Bar:
     def BarFunction(self):
 
         # Tracer for an entering message - set group to "Bar" and level to 5
-        Tracer.Tracer(True, 'Bar', 5, 'Entering BarFunction()');
+        Tracer.Tracer(True, 'Bar', 5, 'Entering BarFunction()')
 
         # ...more Bar stuff 
 

@@ -186,9 +186,14 @@ class Tracer:
 
 def main():
 
-    tt = Tracer(True, 'Main', 5, 'Entering main() function')
+    import Tracer
 
-    Tracer(True, "Foo", 5, "Entering FooFunction()");
+    Tracer.Tracer(True, 'Main', 5, 'Entering main() function')
+
+
+    tt = Tracer.Tracer(True, 'Main', 10, 'Doing some detailed calculations')
+    for i in range(10):
+        tt.Print(True, 'Iteration {}'.format(i))
 
 
 
