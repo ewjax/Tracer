@@ -134,11 +134,11 @@ class Tracer:
                     # is the print_flag true?
                     if print_flag:
 
-                    # a non-zero value for 'serial' not only uniquely identifies this tracer,
-                    # but also doubles as a flag to indicate that this Tracer SHOULD print
-                    # the tracecount variable is a static class value
-                    Tracer.tracer_counter += 1
-                    self.serial = Tracer.tracer_counter
+                        # a non-zero value for 'serial' not only uniquely identifies this tracer,
+                        # but also doubles as a flag to indicate that this Tracer SHOULD print
+                        # the tracecount variable is a static class value
+                        Tracer.tracer_counter += 1
+                        self.serial = Tracer.tracer_counter
 
                         print('Tracer: [{}][{}, {}] {}'.format(self.serial, self.group, self.level, message), file=sys.stderr)
 
