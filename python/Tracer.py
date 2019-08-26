@@ -131,14 +131,15 @@ class Tracer:
             if ( ('ALL' == Tracer.trace_group) or (self.group in Tracer.trace_group) ):
                 if ( ((Tracer.only_flag == True) and (self.level == Tracer.trace_level)) or ((Tracer.only_flag == False) and (self.level <= Tracer.trace_level)) ):
 
+                    # is the print_flag true?
+                    if print_flag:
+
                     # a non-zero value for 'serial' not only uniquely identifies this tracer,
                     # but also doubles as a flag to indicate that this Tracer SHOULD print
                     # the tracecount variable is a static class value
                     Tracer.tracer_counter += 1
                     self.serial = Tracer.tracer_counter
 
-                    # is the print_flag true?
-                    if print_flag:
                         print('Tracer: [{}][{}, {}] {}'.format(self.serial, self.group, self.level, message), file=sys.stderr)
 
 
